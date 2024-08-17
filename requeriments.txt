@@ -1,0 +1,7 @@
+requests
+xmltodict
+pymongo
+python-dotenv
+flask
+gunicorn
+Flask-PyMongo
