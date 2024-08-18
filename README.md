@@ -1,4 +1,4 @@
-# Processo seletivo Nemu
+# Processo seletivo Numera
 ## Desafio
 #### Seu papel é desenvolver uma solução simples e eficaz para armazenar e disponibilizar os dados das pesquisas de forma centralizada, com a capacidade de acesso através de uma API em Python simples. 
  - Você deve consumir uma API disponibilizada para realizar a extração dos dados referente a várias pesquisas realizadas pela empresa.
@@ -90,7 +90,7 @@ Seguem as instruções para implantação da aplicação em produção:
 #### Implementação
 1. Realizar clone da repo com o comando:
 
-   - `git clone `
+   - `git clone https://github.com/RodrigoSKohl/seletivo_numera.git `
 
 1. Renomear [.env.example](.env.example) para **.env**
 
