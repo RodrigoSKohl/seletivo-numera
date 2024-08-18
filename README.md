@@ -98,6 +98,6 @@ Seguem as instruções para implantação da aplicação em produção:
 
    - `docker-composer build`
 
-   - `docker-compose up`
+   - `docker-composer up -d`
 
 1. A API pode ser acessada em [localhost:8000](http://localhost:8000/)
