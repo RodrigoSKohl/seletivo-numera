@@ -1,0 +1,52 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Cache Docker layers
+      uses: actions/cache@v3
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-buildx-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-buildx-
+
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+
+    - name: Create .env file
+      run: |
+        echo "MONGO_IP=${{ secrets.MONGO_IP }}" >> .env
+        echo "MONGO_PORT=${{ secrets.MONGO_PORT }}" >> .env
+        echo "MONGO_DBNAME=${{ secrets.MONGO_DBNAME }}" >> .env
+        echo "MONGO_COLLECTION=${{ secrets.MONGO_COLLECTION }}" >> .env
+        echo "MONGO_ROOT_USER=${{ secrets.MONGO_ROOT_USER }}" >> .env
+        echo "MONGO_ROOT_PASSWORD=${{ secrets.MONGO_ROOT_PASSWORD }}" >> .env
+        echo "FLASK_APP=${{ secrets.FLASK_APP }}" >> .env
+        echo "FLASK_ENV=${{ secrets.FLASK_ENV }}" >> .env
+        echo "WEB_PORT=${{ secrets.WEB_PORT }}" >> .env
+        
+
+    - name: Run Docker Compose
+      run: docker-compose -f docker-compose.yml up -d
+
+    - name: Verify Docker Compose
+      run: docker-compose ps
+
+    - name: Clean up .env file
+      run: rm .env
+
