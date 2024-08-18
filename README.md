@@ -1,4 +1,5 @@
 [![Docker Image CI](https://github.com/RodrigoSKohl/seletivo_numera/actions/workflows/docker-image.yml/badge.svg)](https://github.com/RodrigoSKohl/seletivo_numera/actions/workflows/docker-image.yml)
+
 # Processo seletivo Numera
 ## Desafio
 #### Seu papel é desenvolver uma solução simples e eficaz para armazenar e disponibilizar os dados das pesquisas de forma centralizada, com a capacidade de acesso através de uma API em Python simples. 
