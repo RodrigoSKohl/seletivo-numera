@@ -1,0 +1,23 @@
+services:
+  web:
+    build: .
+    ports:
+      - "${WEB_PORT:-8000}:8000"
+    depends_on:
+      - mongo
+    env_file:
+      - .env
+    environment:
+      FLASK_ENV: "${FLASK_ENV:-production}"
+      FLASK_APP: "${FLASK_APP:-app.py}"
+    volumes:
+      - .:/app
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "${MONGO_PORT:-27017}:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+      MONGO_LOGLEVEL: "0"

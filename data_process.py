@@ -80,8 +80,26 @@ def process_and_save_data(dict_1, dict_2, dict_3):
             survey_data_entry = {
                 "question": question_data.get("question", None),
                 "answer": question_data.get("answer", None),
-                "comments": question_data.get("comments", None)
+                "comments": question_data.get("comments", None) if question_data.get("comments", "") != "" else None
             }
+            
+            # Ajusta o formato da resposta para o padrão desejado
+            if isinstance(survey_data_entry["answer"], list):
+                formatted_answer = []
+                for item in survey_data_entry["answer"]:
+                    if isinstance(item, dict):
+                        formatted_answer.append({
+                            "id": item.get("id", ""),
+                            "option": item.get("option", ""),
+                            "rank": item.get("rank", "")
+                        })
+                    else:
+                        formatted_answer.append({
+                            "id": "",
+                            "option": item,
+                            "rank": ""
+                        })
+                survey_data_entry["answer"] = formatted_answer
             
             combined_data[entry["id"]]["survey_data"][question_id] = survey_data_entry
 
