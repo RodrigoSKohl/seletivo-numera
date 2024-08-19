@@ -83,16 +83,34 @@ Para ambiente de produção, escolhi o Gunicorn, por ser fácil de configurar, c
 
 # Implementação
 
+## Implementação via Docker
+
+### Requisitos
+
+-[Docker](docker.com)
+
+### Procedimentos
+
+1. Criar um arquivo .env no mesmo contexto de [.env.example](.env.example), mudar somente o IP do mongo
+
+1. Executar os seguintes comandos no shell onde se encontra o aruqivo **.env**:
+
+`docker run -d --name mongodb --env-file .env -p 27017:27017 mongo:latest`
+
+`docker run  -p 8000:8000 --env-file .env docker.io/rodrigoskohl/seletivo-numera:latest`
+
+1. 1. A API pode ser acessada em [localhost:8000](http://localhost:8000/)
+
 Seguem as instruções para implantação da aplicação em produção:
 
-#### Implementação via Docker:
+## Implementação via Docker-composer:
 
 ### Requisitos
 
 - [Docker-composer](https://docs.docker.com/compose/install/)
 
 - [Git](https://git-scm.com/downloads)
-## Procedimentos
+### Procedimentos
 
 1. Realizar clone da repo com o comando:
 
@@ -109,7 +127,7 @@ Seguem as instruções para implantação da aplicação em produção:
 1. A API pode ser acessada em [localhost:8000](http://localhost:8000/)
 
 
-#### Implementação local:
+## Implementação local:
 
 ### Requisitos
 
@@ -117,7 +135,7 @@ Seguem as instruções para implantação da aplicação em produção:
 
 - [MongoDB]()
 
-## Procedimentos
+### Procedimentos
 
 1. Realizar clone da repo com o comando:
 
