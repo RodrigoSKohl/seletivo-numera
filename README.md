@@ -81,7 +81,7 @@ Foi realizada a orquestração do serviço da API e banco com o Docker Compose.
 Para ambiente de produção, escolhi o Gunicorn, por ser fácil de configurar, como a idéia era executar o request, montar a estrutura dos dados e salvar tudo no banco, centralizei em um [script](init_db.py) que realiza todos os procedimentos para requisitar os dados da API, processar os dados, salvar os dados no banco e criar um usuário para o banco de dados. Esse script executado no contexto do docker compose, para isso criei um script de [entrypoint](entrypoint.sh) que marca se init_db.py ja foi executado, caso não tenha sido, ele executa o script e, caso aconteça algum problema, ele nao inicializa o container e gera um arquivo de log chamado [init_db.log](init_db.log).
 
 
-## Implementação
+# Implementação
 
 Seguem as instruções para implantação da aplicação em produção:
 
@@ -92,7 +92,7 @@ Seguem as instruções para implantação da aplicação em produção:
 - [Docker-composer](https://docs.docker.com/compose/install/)
 
 - [Git](https://git-scm.com/downloads)
-#### Procedimentos
+## Procedimentos
 
 1. Realizar clone da repo com o comando:
 
@@ -117,7 +117,7 @@ Seguem as instruções para implantação da aplicação em produção:
 
 - [MongoDB]()
 
-#### Procedimentos
+## Procedimentos
 
 1. Realizar clone da repo com o comando:
 
