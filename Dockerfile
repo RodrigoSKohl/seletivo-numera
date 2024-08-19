@@ -11,5 +11,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copia o restante do código da aplicação
 COPY . .
 
-# Define o comando para iniciar o Gunicorn
-CMD ["gunicorn", "-c", "gunicorn_config.py", "app:app"]
+# Copia o script de inicialização
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+# Define o script de inicialização como ponto de entrada
+ENTRYPOINT ["/app/entrypoint.sh"]
+

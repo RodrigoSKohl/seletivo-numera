@@ -77,19 +77,23 @@ Não utilizei bibliotecas para modelar os dados como Pandas ou Marshmalow, poré
 Disponibilizado aqui, no Github.
 
 ### Instruções para implantação e configuração da solução em um ambiente de produção.
-Para ambiente de produção, escolhi o Gunicorn, por ser fácil de configurar, porem como ele trabalha com multithreads, necessitei criar uma logica pra captura dos dados da API para salvar em uma collection no Mongo, visto que a idéia na inicialização é somente fazer o request caso a collection não exista no banco de dados ainda.
-Foi realizada a orquestração da aplicação e banco no Docker.
+Foi realizada a orquestração do serviço da API e banco com o Docker Compose.
+Para ambiente de produção, escolhi o Gunicorn, por ser fácil de configurar, como a idéia era executar o request, montar a estrutura dos dados e salvar tudo no banco, centralizei em um [script](init_db.py) que realiza todos os procedimentos para requisitar os dados da API, processar os dados, salvar os dados no banco e criar um usuário para o banco de dados. Esse script executado no contexto do docker compose, para isso criei um script de [entrypoint](entrypoint.sh) que marca se init_db.py ja foi executado, caso não tenha sido, ele executa o script e, caso aconteça algum problema, ele nao inicializa o container e gera um arquivo de log chamado [init_db.log](init_db.log).
+
 
 ## Implementação
 
 Seguem as instruções para implantação da aplicação em produção:
 
-#### Requisitos necessários:
+#### Implementação via Docker:
+
+### Requisitos
 
 - [Docker-composer](https://docs.docker.com/compose/install/)
 
 - [Git](https://git-scm.com/downloads)
-#### Implementação
+#### Procedimentos
+
 1. Realizar clone da repo com o comando:
 
    - `git clone https://github.com/RodrigoSKohl/seletivo_numera.git `
@@ -98,8 +102,47 @@ Seguem as instruções para implantação da aplicação em produção:
 
 1. Executar os comandos do docker
 
-   - `docker-composer build`
+   - `docker-compose build`
 
-   - `docker-composer up -d`
+   - `docker-compose up -d`
 
 1. A API pode ser acessada em [localhost:8000](http://localhost:8000/)
+
+
+#### Implementação local:
+
+### Requisitos
+
+- [Python3]()
+
+- [MongoDB]()
+
+#### Procedimentos
+
+1. Realizar clone da repo com o comando:
+
+   - `git clone https://github.com/RodrigoSKohl/seletivo_numera.git `
+
+1. Renomear [.env.example](.env.example) para **.env** e substituir
+
+| Variáveis do MongoDB         | Descrição                              |
+|------------------|----------------------------------------|
+| `MONGO_IP`        | Endereço IP                |
+| `MONGODB_PORT_NUMBER`      | Porta                        |
+| `MONGO_INITDB_ROOT_USERNAME`      | Nome de usuário root do MongoDB              |
+| `MONGO_INITDB_ROOT_PASSWORD`  | Senha root do usuário do MongoDB             |
+
+1. Executar os comandos
+
+   - `pip install -r requeriments.txt`
+   - `chmod +x entrypoint.sh` (somente linux)
+   - `.\entrypoint.sh` ou `./entrypoint.sh` no bash
+
+   É necessário estar com o MongoDB rodando, para saber se o processo de inicialização ocorreu bem acesse [init_db.log](init_db.log), terá algo assim no arquivo:
+```
+Usuário 'webtest' criado com sucesso.
+A coleção 'survey_collection' não existe. Executando fetch e processamento de dados.
+Os dados combinados foram salvos no MongoDB.
+```
+
+

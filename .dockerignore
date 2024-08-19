@@ -7,3 +7,4 @@ docker-compose.yml
 Dockerfile
 README.md
 .dockerignore
+init_db.log
