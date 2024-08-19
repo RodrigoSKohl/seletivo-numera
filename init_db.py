@@ -32,6 +32,7 @@ def save_to_mongo(collection, data):
         print("Os dados combinados foram salvos no MongoDB.")
     except Exception as e:
         print(f"Erro ao salvar os dados no MongoDB: {e}")
+        sys.exit(1)
 
 def create_mongo_user(client):
     db = client[MONGO_DBNAME]  # Use o banco de dados correto
@@ -40,8 +41,12 @@ def create_mongo_user(client):
                    roles=[{"role": "readWrite", "db": MONGO_DBNAME}])
         print(f"Usuário '{MONGO_USER}' criado com sucesso.")
     except pymongo.errors.OperationFailure as e:
-        print(f"Erro ao criar usuário: {e}")
-        sys.exit(1)
+        error_msg = e.details.get('errmsg', 'Erro desconhecido')
+        if 'already exists' in error_msg:
+            print(f"Usuário '{MONGO_USER}' já existe. Prosseguindo...")
+        else:
+            print(f"Erro ao criar usuário: {e}")
+            sys.exit(1)
 
 def fetch_and_process_data_if_collection_missing(db):
     """Executa o fetch e o processamento dos dados se a coleção não existir."""
