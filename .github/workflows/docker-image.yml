@@ -32,7 +32,7 @@ jobs:
         context: .
         file: Dockerfile
         push: true
-        tags: seletiva-numera:latest
+        tags: seletivo-numera:latest
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
