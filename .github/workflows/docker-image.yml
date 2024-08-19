@@ -36,11 +36,13 @@ jobs:
     - name: Create .env file
       run: |
         echo "MONGO_IP=${{ secrets.MONGO_IP }}" >> .env
-        echo "MONGO_PORT=${{ secrets.MONGO_PORT }}" >> .env
+        echo "MONGODB_PORT_NUMBER=${{ secrets.MONGO_PORT }}" >> .env
         echo "MONGO_DBNAME=${{ secrets.MONGO_DBNAME }}" >> .env
         echo "MONGO_COLLECTION=${{ secrets.MONGO_COLLECTION }}" >> .env
-        echo "MONGO_ROOT_USER=${{ secrets.MONGO_ROOT_USER }}" >> .env
-        echo "MONGO_ROOT_PASSWORD=${{ secrets.MONGO_ROOT_PASSWORD }}" >> .env
+        echo "MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGO_ROOT_USER }}" >> .env
+        echo "MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_ROOT_PASSWORD }}" >> .env
+        echo "MONGO_USER=${{ secrets.MONGO_ROOT_PASSWORD }}" >> .env
+        echo "MONGO_PASSWORD=${{ secrets.MONGO_ROOT_PASSWORD }}" >> .env
         echo "FLASK_APP=${{ secrets.FLASK_APP }}" >> .env
         echo "FLASK_ENV=${{ secrets.FLASK_ENV }}" >> .env
         echo "WEB_PORT=${{ secrets.WEB_PORT }}" >> .env
