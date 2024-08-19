@@ -8,3 +8,7 @@ Dockerfile
 README.md
 .dockerignore
 init_db.log
+init_db.log
+=======
+/.github
+/.git
