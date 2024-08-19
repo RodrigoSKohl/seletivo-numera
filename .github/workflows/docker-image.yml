@@ -27,12 +27,12 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Build and push Docker image
-      uses: docker/build-push-action@v3
+      uses: docker/build-push-action@v6
       with:
         context: .
         file: Dockerfile
         push: true
-        tags: seletivo-numera:latest
+        tags: rodrigoskohl/seletivo-numera:latest
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
