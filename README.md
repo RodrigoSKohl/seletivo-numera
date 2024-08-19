@@ -95,11 +95,11 @@ Para ambiente de produção, escolhi o Gunicorn, por ser fácil de configurar, c
 
 1. Executar os seguintes comandos no shell onde se encontra o aruqivo **.env**:
 
-`docker run -d --name mongodb --env-file .env -p 27017:27017 mongo:latest`
+  - `docker run -d --name mongodb --env-file .env -p 27017:27017 mongo:latest`
 
-`docker run  -p 8000:8000 --env-file .env docker.io/rodrigoskohl/seletivo-numera:latest`
+  - `docker run  -p 8000:8000 --env-file .env docker.io/rodrigoskohl/seletivo-numera:latest`
 
-1. 1. A API pode ser acessada em [localhost:8000](http://localhost:8000/)
+1. A API pode ser acessada em [localhost:8000](http://localhost:8000/)
 
 Seguem as instruções para implantação da aplicação em produção:
 
@@ -114,15 +114,15 @@ Seguem as instruções para implantação da aplicação em produção:
 
 1. Realizar clone da repo com o comando:
 
-   - `git clone https://github.com/RodrigoSKohl/seletivo_numera.git `
+  - `git clone https://github.com/RodrigoSKohl/seletivo_numera.git `
 
 1. Renomear [.env.example](.env.example) para **.env**
 
 1. Executar os comandos do docker
 
-   - `docker-compose build`
+- `docker-compose build`
 
-   - `docker-compose up -d`
+- `docker-compose up -d`
 
 1. A API pode ser acessada em [localhost:8000](http://localhost:8000/)
 
@@ -139,7 +139,7 @@ Seguem as instruções para implantação da aplicação em produção:
 
 1. Realizar clone da repo com o comando:
 
-   - `git clone https://github.com/RodrigoSKohl/seletivo_numera.git `
+ - `git clone https://github.com/RodrigoSKohl/seletivo_numera.git `
 
 1. Renomear [.env.example](.env.example) para **.env** e substituir
 
@@ -152,9 +152,9 @@ Seguem as instruções para implantação da aplicação em produção:
 
 1. Executar os comandos
 
-   - `pip install -r requeriments.txt`
-   - `chmod +x entrypoint.sh` (somente linux)
-   - `.\entrypoint.sh` ou `./entrypoint.sh` no bash
+  - `pip install -r requeriments.txt`
+  - `chmod +x entrypoint.sh` (somente linux)
+ - `.\entrypoint.sh` ou `./entrypoint.sh` no bash
 
    É necessário estar com o MongoDB rodando, para saber se o processo de inicialização ocorreu bem acesse [init_db.log](init_db.log), terá algo assim no arquivo:
 ```
