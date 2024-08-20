@@ -26,7 +26,7 @@ Para a [API](app.py) em Python utilizei **Flask** com **Gunicorn** para o ambien
 Não optei por usar algum **ODM**, pois para o projeto o plugin do Flask para Mongo já supriu as necessidades.
 
 ### Simplicidade e eficácia
-Criei um [script](data_process.py) a parte para coleta de dados, tentei simplificar ao máximo a modelagem dos dados para seguir em um padrão limpo, porém sem deixar de remover informações que possam ser importantes. As verificações se a collection se encontram no banco não necessitando executar o mesmo script, foram centralizada no arquivo de execução da [API](app.py)
+Criei um [script](data_process.py) a parte para coleta de dados, tentei simplificar ao máximo a modelagem dos dados para seguir em um padrão limpo, porém sem deixar de remover informações que possam ser importantes. As verificações se a collection se encontram no banco não necessitando executar o mesmo script, foram centralizada no arquivo de execução [init_db.py](init_db.py)
 
 Para a coleta de dados usei a biblioteca nativa do Python, json e para o xml a xmltodict. Nos requests para consumir a API da empresa usei a biblioteca request. O arquivo de processamento se baseia em duas funções que eu importo no arquivo de API. 
 
@@ -82,12 +82,13 @@ Para ambiente de produção, escolhi o Gunicorn, por ser fácil de configurar, c
 
 
 # Implementação
+Seguem as instruções para implantação da aplicação em produção:
 
 ## Implementação via Docker
 
 ### Requisitos
 
--[Docker](docker.com)
+  - [Docker](docker.com)
 
 ### Procedimentos
 
@@ -101,7 +102,7 @@ Para ambiente de produção, escolhi o Gunicorn, por ser fácil de configurar, c
 
 1. A API pode ser acessada em [localhost:8000](http://localhost:8000/)
 
-Seguem as instruções para implantação da aplicação em produção:
+
 
 ## Implementação via Docker-composer:
 
