@@ -144,7 +144,7 @@ Seguem as instruções para implantação da aplicação em produção:
 
 1. Renomear [.env.example](.env.example) para **.env** e substituir
 
-| Variáveis do MongoDB         | Descrição                              |
+| Enviornments do MongoDB         | Descrição                              |
 |------------------|----------------------------------------|
 | `MONGO_IP`        | Endereço IP                |
 | `MONGODB_PORT_NUMBER`      | Porta                        |
