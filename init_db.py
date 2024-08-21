@@ -21,8 +21,8 @@ def get_mongo_client():
     """Cria e retorna uma instância do MongoClient com a URI montada dinamicamente."""
     mongo_uri = f"mongodb://{MONGO_ROOT_USER}:{MONGO_ROOT_PASSWORD}@{MONGO_IP}:{MONGO_PORT}/{MONGO_DBNAME}?authsource=admin"
     
-    # Configura o pool de conexões
-    client = pymongo.MongoClient(mongo_uri, maxPoolSize=50)
+    # Configura conexão 
+    client = pymongo.MongoClient(mongo_uri)
     return client
 
 def save_to_mongo(collection, data):
