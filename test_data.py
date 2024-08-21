@@ -53,7 +53,7 @@ def fetch_data_from_api(url):
 
 def main(id_item):
     # URL da API com o ID passado como parâmetro
-    api_url = f'http://localhost:5000/data/{id_item}'
+    api_url = f'http://localhost:8000/data/{id_item}'
 
     # Coletar e validar os dados
     response_data = fetch_data_from_api(api_url)
