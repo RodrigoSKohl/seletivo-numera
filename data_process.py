@@ -117,24 +117,27 @@ def process_and_save_data(dict_1, dict_2, dict_3):
             if question not in ["id", "contact_id", "status", "date_submitted", "session_id", "language", "date_started", "ip_address", "referer", "user_agent", "country"]:
                 question_id = question_map.get(question, {}).get("id", question)
                 question_type = question_map.get(question, {}).get("type", None)
+                question_text = question_map.get(question, {}).get("question", question)
+                
                 try:
                     answer_data = json.loads(answer)
                     if isinstance(answer_data, list):
                         formatted_answer = [{"id": item["id"], "option": item["option"], "rank": item["rank"]} for item in answer_data]
                         combined_data[survey_id]["survey_data"][question_id] = {
                             "answer": formatted_answer,
+                            "question": question_text,
                             "type": question_type
                         }
                     else:
                         combined_data[survey_id]["survey_data"][question_id] = {
-                            "question": question,
                             "answer": answer_data,
+                            "question": question_text,
                             "type": question_type
                         }
                 except json.JSONDecodeError:
                     combined_data[survey_id]["survey_data"][question_id] = {
-                        "question": question,
-                        "answer": answer,
+                        "answer": None if answer == "" else answer,
+                        "question": question_text,
                         "type": question_type
                     }
                 
@@ -142,6 +145,7 @@ def process_and_save_data(dict_1, dict_2, dict_3):
                 comments = entry.get(f"{question}_comments", "")
                 if comments not in ("", None):
                     combined_data[survey_id]["survey_data"][question_id]["comments"] = comments
+
 
     # Processando a terceira estrutura e adicionando ao dicionário combinado
     for entry in dict_3["survey_answer"]["data"]["item"]:
