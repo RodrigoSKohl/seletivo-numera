@@ -49,22 +49,17 @@ def fetch_data():
 # Função para padronizar e salvar os dados
 def process_and_save_data(dict_1, dict_2, dict_3):
 
-    # Mapeia perguntas para IDs para usar na estrutura 2
-    question_id_map = {}
+    # Mapeia perguntas para IDs e tipos para usar na estrutura 2
+    question_map = {}
 
     # Processando a primeira estrutura e criando o mapeamento
     for entry in dict_1["data"]:
         for question_id, question_data in entry["survey_data"].items():
             question_text = question_data.get("question", "")
-            question_id_map[question_text] = question_id
-
-    # Processando a terceira estrutura e adicionando ao mapeamento
-    for entry in dict_3["survey_answer"]["data"]["item"]:
-        for survey_item in entry["survey_data"]["item"]:
-            question_text = survey_item.get("question", "")
-            question_id = survey_item["id"]
-            if question_text not in question_id_map:
-                question_id_map[question_text] = question_id
+            question_map[question_text] = {
+                "id": question_id,
+                "type": question_data.get("type", None)
+            }
 
     # Estrutura Final
     combined_data = {}
@@ -72,17 +67,22 @@ def process_and_save_data(dict_1, dict_2, dict_3):
     # Processando a primeira estrutura e ajustando o formato
     for entry in dict_1["data"]:
         combined_data[entry["id"]] = {
-            **extract_common_fields(entry), 
+            **extract_common_fields(entry),
             "survey_data": {}
         }
-        
+
         for question_id, question_data in entry["survey_data"].items():
             survey_data_entry = {
                 "question": question_data.get("question", None),
                 "answer": question_data.get("answer", None),
-                "comments": question_data.get("comments", None) if question_data.get("comments", "") != "" else None
+                "type": question_data.get("type", None),
             }
-            
+
+            # Adiciona comments se não for uma string vazia ou null
+            comments = question_data.get("comments", "")
+            if comments not in ("", None):
+                survey_data_entry["comments"] = comments
+
             # Ajusta o formato da resposta para o padrão desejado
             if isinstance(survey_data_entry["answer"], list):
                 formatted_answer = []
@@ -100,87 +100,89 @@ def process_and_save_data(dict_1, dict_2, dict_3):
                             "rank": ""
                         })
                 survey_data_entry["answer"] = formatted_answer
-            
+
             combined_data[entry["id"]]["survey_data"][question_id] = survey_data_entry
 
-    # Processando a segunda estrutura e adicionando IDs
+    # Processando a segunda estrutura e adicionando IDs e tipos
     for entry in dict_2["data"]:
         survey_id = entry["id"]
-        
-        # Inicializa a entrada no dicionário combinado, caso não exista
+
         if survey_id not in combined_data:
             combined_data[survey_id] = {
-                **extract_common_fields(entry), 
+                **extract_common_fields(entry),
                 "survey_data": {}
             }
-        
-        # Itera sobre as perguntas e respostas
+
         for question, answer in entry.items():
             if question not in ["id", "contact_id", "status", "date_submitted", "session_id", "language", "date_started", "ip_address", "referer", "user_agent", "country"]:
-                question_id = question_id_map.get(question, question)
+                question_id = question_map.get(question, {}).get("id", question)
+                question_type = question_map.get(question, {}).get("type", None)
                 try:
-                    # Tenta carregar a resposta como JSON, se possível
                     answer_data = json.loads(answer)
                     if isinstance(answer_data, list):
-                        # Ajusta o formato da resposta para o padrão desejado
                         formatted_answer = [{"id": item["id"], "option": item["option"], "rank": item["rank"]} for item in answer_data]
                         combined_data[survey_id]["survey_data"][question_id] = {
                             "answer": formatted_answer,
-                            "comments": entry.get(f"{question}_comments", None)  # Garante que comments seja criado  se não existir
+                            "type": question_type
                         }
                     else:
                         combined_data[survey_id]["survey_data"][question_id] = {
                             "question": question,
                             "answer": answer_data,
-                            "comments": entry.get(f"{question}_comments", None)  # Garante que comments seja criado  se não existir
+                            "type": question_type
                         }
                 except json.JSONDecodeError:
-                    # Se a resposta não for JSON, usa como está
                     combined_data[survey_id]["survey_data"][question_id] = {
                         "question": question,
                         "answer": answer,
-                        "comments": entry.get(f"{question}_comments", None)  # Garante que comments seja criado  se não existir
+                        "type": question_type
                     }
+                
+                # Adiciona comments se não for uma string vazia ou null
+                comments = entry.get(f"{question}_comments", "")
+                if comments not in ("", None):
+                    combined_data[survey_id]["survey_data"][question_id]["comments"] = comments
 
     # Processando a terceira estrutura e adicionando ao dicionário combinado
     for entry in dict_3["survey_answer"]["data"]["item"]:
         survey_id = entry["id"]
         if survey_id not in combined_data:
             combined_data[survey_id] = {
-                **extract_common_fields(entry), 
+                **extract_common_fields(entry),
                 "survey_data": {}
             }
-        
+
         for survey_item in entry["survey_data"]["item"]:
             answer = survey_item.get("answer", None)
             if isinstance(answer, dict):
                 answer = answer.get("item", answer)
-            
-            # Cria o dicionário para a entrada de dados
+
             survey_data_entry = {
                 "question": survey_item["question"],
                 "answer": answer,
-                "comments": survey_item.get("comments", None)  # Garante que comments seja criado  se não existir
+                "type": question_map.get(survey_item["question"], {}).get("type", None)
             }
-            
+
+            # Adiciona comments se não for uma string vazia ou null
+            comments = survey_item.get("comments", "")
+            if comments not in ("", None):
+                survey_data_entry["comments"] = comments
+
             combined_data[survey_id]["survey_data"][survey_item["id"]] = survey_data_entry
 
         # Tratamento dos dados para inserir no MongoDB
         cleaned_data = []
         for k, v in combined_data.items():
             try:
-                # Tenta converter o valor de k para ObjectId
                 object_id = ObjectId(k)
             except Exception:
-                # Se a conversão falhar, gere um novo ObjectId
                 object_id = ObjectId()
-            
-            # Cria um novo documento com _id como ObjectId e mantém o campo 'id'
+
             document = {
-                "_id": object_id,  # Converte o valor de k para ObjectId
-                "id": k,  # Mantém o campo 'id' original
-                **{key: value for key, value in v.items()}  # Mantém os outros campos
+                "_id": object_id,
+                "id": k,
+                **{key: value for key, value in v.items()}
             }
             cleaned_data.append(document)
-    
+
     return cleaned_data
