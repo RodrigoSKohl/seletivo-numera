@@ -158,8 +158,16 @@ def process_and_save_data(dict_1, dict_2, dict_3):
 
         for survey_item in entry["survey_data"]["item"]:
             answer = survey_item.get("answer", None)
+
             if isinstance(answer, dict):
                 answer = answer.get("item", answer)
+            
+            # Verifica se 'answer' é uma lista de dicionários
+            if isinstance(answer, list):
+                # Remove o campo 'id' de cada dicionário dentro da lista
+                for item in answer:
+                    if isinstance(item, dict):
+                        item.pop("id", None)
 
             survey_data_entry = {
                 "question": survey_item["question"],
