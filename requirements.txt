@@ -5,3 +5,4 @@ flask
 gunicorn
 Flask-PyMongo
 pymongo
+gevent
