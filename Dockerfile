@@ -18,3 +18,4 @@ RUN chmod +x /app/entrypoint.sh
 # Define o script de inicialização como ponto de entrada
 ENTRYPOINT ["/app/entrypoint.sh"]
 
+LABEL org.opencontainers.image.source="https://github.com/RodrigoSKohl/seletivo-numera"
