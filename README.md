@@ -164,4 +164,5 @@ A coleção 'survey_collection' não existe. Executando fetch e processamento de
 Os dados combinados foram salvos no MongoDB.
 ```
 
-
+# 1. Produção
+A imagem no [DockerHUB](https://hub.docker.com/repository/docker/rodrigoskohl/seletivo-numera) esta pronta e configurada para produção em qualquer CSP que aceite docker, como Azure, GCP, AWS.
